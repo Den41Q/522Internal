@@ -54,8 +54,8 @@ public class MainActivity extends AppCompatActivity {
         btnCheck = findViewById(R.id.check_btn);
 
         mySharedPref = getSharedPreferences("checkBox", MODE_PRIVATE);
-        boolean chkBox = mySharedPref.getBoolean("checkBox", true);
-        if (chkBox = true) {
+        boolean chkBox = mySharedPref.getBoolean("checkBox", false);
+        if (chkBox) {
             checkBox.setChecked(true);
         } else {
             checkBox.setChecked(false);
@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (checkBox.isChecked()) {
-                    String myLogin = "Den41Q";
+                    String myLogin = "den41q";
                     String myPass = "qwerty";
                     String data = loadText();
 
@@ -158,7 +158,9 @@ public class MainActivity extends AppCompatActivity {
             BufferedWriter bw = new BufferedWriter(outputStreamWriter);
 
             bw.write(login);
+            bw.write("\n");
             bw.write(pass);
+            bw.write("\n");
             bw.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -168,26 +170,28 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void read() {
+        StringBuilder text = new StringBuilder();
+
         try {
-            String myLogin = "Den41Q";
-            String myPass = "qwertY";
+            String myLogin = "den41q";
+            String myPass = "qwerty";
 
             FileInputStream fileInputStream = openFileInput("Data");
             InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
             BufferedReader reader = new BufferedReader(inputStreamReader);
 
-            String line = reader.readLine();
-            while (line != null) {
-                Log.d("Tag", line);
-                line = reader.readLine();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                Log.d("Log", line);
+                text.append(line);
+                text.append("\n");
             }
 
-
-            if (line.equalsIgnoreCase(myLogin + "\n" + myPass + "\n")) {
+            if (text.toString().equalsIgnoreCase(myLogin + "\n" + myPass + "\n")) {
                 Toast.makeText(MainActivity.this, "Логин и пароль верные",
                         Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(MainActivity.this, line,
+                Toast.makeText(MainActivity.this, "Неверный логин или пароль",
                         Toast.LENGTH_SHORT).show();
             }
         } catch (FileNotFoundException e) {
